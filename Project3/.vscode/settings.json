@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.m": "matlab",
+        "stdexcept": "cpp",
+        "*.tcc": "cpp",
+        "chrono": "cpp",
+        "numeric": "cpp",
+        "functional": "cpp"
+    }
+}

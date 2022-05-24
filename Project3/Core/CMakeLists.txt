@@ -1,0 +1,24 @@
+set(Core_Files
+    Core/Config.h
+    Core/Config.cpp
+    Core/Vec.h
+    Core/VecCompare.h
+    Core/Box.h
+    Core/Interval.h
+    Core/numlib.h
+    Core/numlib.cpp
+    Core/static_for.h
+    Core/Polynomial.h
+    Core/Curve.h
+    Core/Curve.cpp
+    Core/Tensor.h
+    Core/TensorExpr.h
+    Core/TensorSlice.h
+    Core/RowSparse.h
+    Core/Wrapper_OpenMP.cpp
+    Core/Wrapper_OpenMP.h
+    Core/Wrapper_LAPACKE.h
+    Core/SolveTri.h
+    Core/RectDomain.h
+    PARENT_SCOPE
+)
