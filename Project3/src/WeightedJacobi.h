@@ -6,6 +6,7 @@ class WeightedJacobi:public Smoother<Dim>{
 private:
     const Real weight=2.0/3; //The weight of the smoother
 public:
+    WeightedJacobi(const RectDomain<Dim>& adomain):Smoother<Dim>(adomain){};
     void apply(const Tensor<Real,Dim>& phi, const Tensor<Real,Dim>& rhs, Tensor<Real,Dim>& res) const;
 };
 template<int Dim>

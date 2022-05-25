@@ -7,6 +7,7 @@ class BoundaryFiller{
 protected:
     RectDomain<Dim> domain;
 public:
+    BoundaryFiller(const RectDomain<Dim>& adomain):domain(adomain){};
     //Mark the normal vector of the streight edges
     //Left/Down:Mark as low,Right/Up:Mark as high
     enum normal{low=-1,high=1};

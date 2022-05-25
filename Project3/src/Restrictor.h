@@ -10,12 +10,13 @@ protected:
     RectDomain<Dim> coarseDomain;
     RectDomain<Dim> fineDomain;
 public:
-    Restrictor(RectDomain<Dim> D1,RectDomain<Dim> D2):coarseDomain(D1),fineDomain(D2){};
+    Restrictor(const RectDomain<Dim>& D1,const RectDomain<Dim>& D2):coarseDomain(D1),fineDomain(D2){};
     virtual void apply(const Tensor<Real,Dim>& data,Tensor<Real,Dim>& res) const = 0;
 };
 template<int Dim>
 class Injection:public Restrictor<Dim>{
 public:
+    Injection(const RectDomain<Dim>& acoarse,const RectDomain<Dim>& afine):Restrictor<Dim>(acoarse,afine){};
     void apply(const Tensor<Real,Dim>& data,Tensor<Real,Dim>& res) const{
         if(Dim==2){
             Box<Dim> bx_res=res.box();
@@ -30,6 +31,7 @@ public:
 template<int Dim>
 class FullWeighting:public Restrictor<Dim>{
 public:
+    FullWeighting(const RectDomain<Dim>& acoarse,const RectDomain<Dim>& afine):Restrictor<Dim>(acoarse,afine){};
     void apply(const Tensor<Real,Dim>& data,Tensor<Real,Dim>& res) const{
         if(Dim==2){
             Box<Dim> bx_res=res.box();

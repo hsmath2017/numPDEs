@@ -7,6 +7,7 @@ class FuncFiller{
 protected:
     RectDomain<Dim> domain;
 public:
+    FuncFiller(const RectDomain<Dim>& adomain):domain(adomain){};
     //fill the inside tensor with the rhs function f.
     inline void fill(Tensor<Real,Dim>& res,const ScalarFunction<Dim>* pfunc) const;
 };

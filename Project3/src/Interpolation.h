@@ -9,11 +9,15 @@ protected:
     RectDomain<Dim> coarseDomain;
     RectDomain<Dim> fineDomain;
 public:
+    Interpolator(const RectDomain<Dim>& acoarse,const RectDomain<Dim>& afine):coarseDomain(acoarse),fineDomain(afine){};
+
     virtual void apply(const Tensor<Real,Dim>& data,Tensor<Real,Dim>& res) = 0;
 };
 template<int Dim>
 class LinearInterpolator:public Interpolator<Dim>{
 public:
+    LinearInterpolator(const RectDomain<Dim>& acoarse,const RectDomain<Dim>& afine):Interpolator<Dim>(acoarse,afine){};
+
     void apply(const Tensor<Real,Dim>& data,Tensor<Real,Dim>& res){
         if(Dim==2){
             loop_box_2(res.box(),i,j){

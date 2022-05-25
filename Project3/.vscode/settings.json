@@ -5,6 +5,10 @@
         "*.tcc": "cpp",
         "chrono": "cpp",
         "numeric": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "tuple": "cpp",
+        "mutex": "cpp",
+        "streambuf": "cpp",
+        "memory": "cpp"
     }
 }

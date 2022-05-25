@@ -1,0 +1,12 @@
+set(MultiGrid_Files
+    src/ScalarFunction.h
+    src/BoundaryFiller.h 
+    src/FuncFiller.h
+    src/Interpolation.h 
+    src/Laplacian.h 
+    src/Restrictor.h 
+    src/Smoother.h 
+    src/WeightedJacobi.h     
+    src/MGSolver.h
+    src/MGFactory.h 
+);

@@ -3,6 +3,7 @@
 #define _Laplacian
 #include "Smoother.h"
 #include "Core/Tensor.h"
+#include "Core/TensorExpr.h"
 #include <vector>
 template<int Dim>
 class Laplacian{

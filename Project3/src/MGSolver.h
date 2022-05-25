@@ -4,7 +4,6 @@
 #include "BoundaryFiller.h"
 #include "Interpolation.h"
 #include "Restrictor.h"
-#include "PoissonDirectSolver.h"
 #include "Laplacian.h"
 
 template<int Dim>
@@ -39,7 +38,7 @@ public:
 
     void FMVCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs) const;
 
-    Real solve(Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs,ScalarFunction<Dim>* BdryFunc,bool useFMVCycle=0) const; 
+    void solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,ScalarFunction<Dim>* BdryFunc,bool useFMVCycle=0) const; 
 };
 
 #else
