@@ -1,0 +1,12 @@
+/home/shuang/numPDEs/Project3/build/CMakeFiles/rebuild_cache.dir
+/home/shuang/numPDEs/Project3/build/CMakeFiles/edit_cache.dir
+/home/shuang/numPDEs/Project3/build/src/CMakeFiles/rebuild_cache.dir
+/home/shuang/numPDEs/Project3/build/src/CMakeFiles/MultiGrid.dir
+/home/shuang/numPDEs/Project3/build/src/CMakeFiles/edit_cache.dir
+/home/shuang/numPDEs/Project3/build/src/Core/CMakeFiles/rebuild_cache.dir
+/home/shuang/numPDEs/Project3/build/src/Core/CMakeFiles/edit_cache.dir
+/home/shuang/numPDEs/Project3/build/src/MultiGrid/CMakeFiles/rebuild_cache.dir
+/home/shuang/numPDEs/Project3/build/src/MultiGrid/CMakeFiles/edit_cache.dir
+/home/shuang/numPDEs/Project3/build/test/CMakeFiles/rebuild_cache.dir
+/home/shuang/numPDEs/Project3/build/test/CMakeFiles/testVCycle.dir
+/home/shuang/numPDEs/Project3/build/test/CMakeFiles/edit_cache.dir

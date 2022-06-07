@@ -1,0 +1,14 @@
+set(MultiGrid_Files
+    MultiGrid/ScalarFunction.h
+    MultiGrid/BoundaryFiller.h 
+    MultiGrid/FuncFiller.h
+    MultiGrid/Interpolation.h 
+    MultiGrid/Laplacian.h 
+    MultiGrid/Restrictor.h 
+    MultiGrid/Smoother.h 
+    MultiGrid/WeightedJacobi.h     
+    MultiGrid/MGSolver.h
+    MultiGrid/MGSolver.cpp
+    MultiGrid/MGFactory.h 
+    PARENT_SCOPE
+)

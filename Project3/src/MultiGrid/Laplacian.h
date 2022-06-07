@@ -11,6 +11,7 @@ protected:
     RectDomain<Dim> domain;
     Smoother<Dim>* psmoother;
 public:
+    Laplacian(const RectDomain<Dim>& adomain,Smoother<Dim>* apsmoother):domain(adomain),psmoother(apsmoother){};
     void apply(const Tensor<Real,Dim>& phi,Tensor<Real,Dim>& res) const;
     void smooth(const Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs, Tensor<Real,Dim>& res) const;
     void computeResidual(const Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs,Tensor<Real,Dim>& res) const;

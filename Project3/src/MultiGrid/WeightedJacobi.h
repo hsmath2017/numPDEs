@@ -12,7 +12,7 @@ public:
 template<int Dim>
 void WeightedJacobi<Dim>::apply(const Tensor<Real,Dim>& phi, const Tensor<Real,Dim>& rhs, Tensor<Real,Dim>& res) const{
     if(Dim==2){
-        auto dx=domain.spacing();
+        auto dx=(this->domain).spacing();
         Real area=prod(dx);
         Tensor<Real,Dim> tmp;
         Box<Dim> bx=phi.box();

@@ -5,18 +5,18 @@
 #include "Interpolation.h"
 #include "Restrictor.h"
 #include "Laplacian.h"
-
+#include "WeightedJacobi.h"
+struct MGParam{
+    int numPreIter;
+    int numPostIter;
+    int numBottomIter;
+    Real reltol;
+    int maxIter;
+};
 template<int Dim>
 class MGSolver
 {
 public:
-    struct MGParam{
-        int numPreIter;
-        int numPostIter;
-        int numBottomIter;
-        Real reltol;
-        int maxIter;
-    };
     template<class T>
     using Vector=std::vector<T>;
     using VPR=Vector<Restrictor<Dim>*>;
@@ -27,7 +27,6 @@ protected:
     Vector<Laplacian<Dim>> vLaplacian;
     VPR vpRestriction;
     VPI vpInterpolation;
-    PoissonDirectSolver<Dim> bottomSolver;
     MGParam param;
 public:
     MGSolver(const Vector<RectDomain<Dim>>& avDomain,const VPR& avpRestriction,const VPI& avpInterpolation);
@@ -38,7 +37,18 @@ public:
 
     void FMVCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs) const;
 
-    void solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,ScalarFunction<Dim>* BdryFunc,bool useFMVCycle=0) const; 
+    void solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,ScalarFunction<Dim>* BdryFunc,bool useFMVCycle) const; 
+
+    Real getError(const Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& sol){
+        Real maxError=0;
+        auto bx=phi.box();
+        loop_box_2(bx,i,j){
+            if(std::abs(phi(i,j)-sol(i,j))>maxError){
+                maxError=std::abs(phi(i,j)-sol(i,j));
+            }
+        }
+        return maxError;
+    }
 };
 
 #else

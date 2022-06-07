@@ -1,6 +1,11 @@
 #include "MGSolver.h"
 template<int Dim>
 MGSolver<Dim>::MGSolver(const Vector<RectDomain<Dim>>& avDomain,const VPR& avpRestriction,const VPI& avpInterpolation):vDomain(avDomain),vpRestriction(avpRestriction),vpInterpolation(avpInterpolation){
+    for(auto d:avDomain){
+        Smoother<Dim>* psmoother=new WeightedJacobi<Dim>(d);
+        Laplacian<Dim> L(d,psmoother);
+        vLaplacian.push_back(L);
+    }
 };
 
 template<int Dim>
@@ -14,21 +19,25 @@ void MGSolver<Dim>::setParam(const MGParam& aparam){
 
 template<int Dim>
 void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs) const{
-    Laplacian<Dim> LevelOp=Laplacian[depth];
+    std::cout<<"Depth = "<<depth<<std::endl;
+    Laplacian<Dim> LevelOp=vLaplacian[depth];
     Tensor<Real,Dim> res=rhs;
     for(int i=0;i<param.numPreIter;i++){
         LevelOp.smooth(phi,rhs,res);
         phi=res;
     }
     if(depth==param.maxIter){
-        //...
+        for(int i=0;i<param.numBottomIter;i++){
+            LevelOp.smooth(phi,rhs,res);
+            phi=res;
+        }
     }else{
         LevelOp.computeResidual(phi,rhs,res);
         Tensor<Real,Dim> newrhs;
         auto bx=res.box();
-        Box<Dim> newbx;
-        newbx.hi()=bx.hi()/2;
-        newbx.lo()=bx.lo();
+        auto vechi=bx.hi()/2;
+        auto veclo=bx.lo();
+        Box<Dim> newbx(veclo,vechi);
         newrhs.resize(newbx);
         vpRestriction[depth]->apply(res,newrhs);
         Tensor<Real,Dim> newres;
@@ -53,9 +62,9 @@ void MGSolver<Dim>::FMVCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,D
     }else{
         Tensor<Real,Dim> newrhs,newphi;
         Box<Dim> bx=rhs.box();
-        Box<Dim> newbx;
-        newbx.lo()=bx.lo()/2;
-        newbx.hi()=bx.hi()/2;
+        auto veclo=bx.lo()/2;
+        auto vechi=bx.hi()/2;
+        Box<Dim> newbx(veclo,vechi);
         newrhs.resize(newbx);
         newphi.resize(newbx);
         vpRestriction[depth]->apply(rhs,newrhs);
@@ -67,7 +76,7 @@ void MGSolver<Dim>::FMVCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,D
 
 //RightFunc f:-\Delta u=f, BdryFunc g:u|_{\partial\Omega}=g.
 template<int Dim>
-void MGSolver<Dim>::solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,ScalarFunction<Dim>* BdryFunc,bool useFMVCycle=0) const{
+void MGSolver<Dim>::solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,ScalarFunction<Dim>* BdryFunc,bool useFMVCycle) const{
     //Generate RHS
     Tensor<Real,Dim> rhs;
     Box<Dim> bx=vDomain[0];

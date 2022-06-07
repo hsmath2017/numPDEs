@@ -1,0 +1,2 @@
+/usr/bin/ar qc libNS4.a  CMakeFiles/NS4.dir/Core/Config.cpp.o CMakeFiles/NS4.dir/Core/numlib.cpp.o CMakeFiles/NS4.dir/Core/Curve.cpp.o CMakeFiles/NS4.dir/Core/Wrapper_OpenMP.cpp.o CMakeFiles/NS4.dir/MultiGrid/MGSolver.cpp.o
+/usr/bin/ranlib libNS4.a

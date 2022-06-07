@@ -1,0 +1,2 @@
+/usr/bin/ar qc libMultiGrid.a  CMakeFiles/MultiGrid.dir/Core/Config.cpp.o CMakeFiles/MultiGrid.dir/Core/numlib.cpp.o CMakeFiles/MultiGrid.dir/Core/Curve.cpp.o CMakeFiles/MultiGrid.dir/Core/Wrapper_OpenMP.cpp.o CMakeFiles/MultiGrid.dir/MultiGrid/MGSolver.cpp.o
+/usr/bin/ranlib libMultiGrid.a
