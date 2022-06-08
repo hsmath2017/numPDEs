@@ -7,6 +7,7 @@
 /home/shuang/numPDEs/Project3/build/src/Core/CMakeFiles/edit_cache.dir
 /home/shuang/numPDEs/Project3/build/src/MultiGrid/CMakeFiles/rebuild_cache.dir
 /home/shuang/numPDEs/Project3/build/src/MultiGrid/CMakeFiles/edit_cache.dir
+/home/shuang/numPDEs/Project3/build/test/CMakeFiles/edit_cache.dir
 /home/shuang/numPDEs/Project3/build/test/CMakeFiles/rebuild_cache.dir
 /home/shuang/numPDEs/Project3/build/test/CMakeFiles/testVCycle.dir
-/home/shuang/numPDEs/Project3/build/test/CMakeFiles/edit_cache.dir
+/home/shuang/numPDEs/Project3/build/test/CMakeFiles/testOp.dir

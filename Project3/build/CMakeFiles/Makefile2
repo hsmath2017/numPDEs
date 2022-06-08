@@ -165,11 +165,13 @@ src/MultiGrid/preinstall:
 
 # Convenience name for "all" pass in the directory.
 test/all: test/CMakeFiles/testVCycle.dir/all
+test/all: test/CMakeFiles/testOp.dir/all
 
 .PHONY : test/all
 
 # Convenience name for "clean" pass in the directory.
 test/clean: test/CMakeFiles/testVCycle.dir/clean
+test/clean: test/CMakeFiles/testOp.dir/clean
 
 .PHONY : test/clean
 
@@ -185,7 +187,7 @@ test/preinstall:
 test/CMakeFiles/testVCycle.dir/all: src/CMakeFiles/MultiGrid.dir/all
 	$(MAKE) -f test/CMakeFiles/testVCycle.dir/build.make test/CMakeFiles/testVCycle.dir/depend
 	$(MAKE) -f test/CMakeFiles/testVCycle.dir/build.make test/CMakeFiles/testVCycle.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/shuang/numPDEs/Project3/build/CMakeFiles --progress-num=7,8 "Built target testVCycle"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/shuang/numPDEs/Project3/build/CMakeFiles --progress-num=9,10 "Built target testVCycle"
 .PHONY : test/CMakeFiles/testVCycle.dir/all
 
 # Include target in all.
@@ -212,6 +214,43 @@ test/CMakeFiles/testVCycle.dir/clean:
 
 # clean rule for target.
 clean: test/CMakeFiles/testVCycle.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target test/CMakeFiles/testOp.dir
+
+# All Build rule for target.
+test/CMakeFiles/testOp.dir/all: src/CMakeFiles/MultiGrid.dir/all
+	$(MAKE) -f test/CMakeFiles/testOp.dir/build.make test/CMakeFiles/testOp.dir/depend
+	$(MAKE) -f test/CMakeFiles/testOp.dir/build.make test/CMakeFiles/testOp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/shuang/numPDEs/Project3/build/CMakeFiles --progress-num=7,8 "Built target testOp"
+.PHONY : test/CMakeFiles/testOp.dir/all
+
+# Include target in all.
+all: test/CMakeFiles/testOp.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+test/CMakeFiles/testOp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/shuang/numPDEs/Project3/build/CMakeFiles 8
+	$(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/testOp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/shuang/numPDEs/Project3/build/CMakeFiles 0
+.PHONY : test/CMakeFiles/testOp.dir/rule
+
+# Convenience name for target.
+testOp: test/CMakeFiles/testOp.dir/rule
+
+.PHONY : testOp
+
+# clean rule for target.
+test/CMakeFiles/testOp.dir/clean:
+	$(MAKE) -f test/CMakeFiles/testOp.dir/build.make test/CMakeFiles/testOp.dir/clean
+.PHONY : test/CMakeFiles/testOp.dir/clean
+
+# clean rule for target.
+clean: test/CMakeFiles/testOp.dir/clean
 
 .PHONY : clean
 

@@ -56,4 +56,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "src/CMakeFiles/MultiGrid.dir/DependInfo.cmake"
   "test/CMakeFiles/testVCycle.dir/DependInfo.cmake"
+  "test/CMakeFiles/testOp.dir/DependInfo.cmake"
   )

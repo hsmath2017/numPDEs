@@ -50,10 +50,14 @@ public:
                     res(i,j)=data(origin);
                 }else{
                     Real val=0;
-                    val+=data(origin)*1.0/2;
+                    val+=data(origin)*1.0/4;
                     for(auto it:Dir){
                         auto tmp=origin+it;
                         val+=data(tmp)*1.0/8;
+                    }
+                    for(auto it:Dir){
+                        auto tmp=origin+it*2;
+                        val+=data(tmp)*1.0/16;
                     }
                     res(i,j)=val;
                 }

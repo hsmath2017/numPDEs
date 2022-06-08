@@ -15,6 +15,9 @@ public:
     void apply(const Tensor<Real,Dim>& phi,Tensor<Real,Dim>& res) const;
     void smooth(const Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs, Tensor<Real,Dim>& res) const;
     void computeResidual(const Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs,Tensor<Real,Dim>& res) const;
+    Vec<Real,2> getsize(){
+        return domain.spacing();
+    }
 };
 template<int Dim>
 void Laplacian<Dim>::apply(const Tensor<Real,Dim>& phi,Tensor<Real,Dim>& res) const{
@@ -44,9 +47,9 @@ void Laplacian<Dim>::apply(const Tensor<Real,Dim>& phi,Tensor<Real,Dim>& res) co
             }else{
                 Real val=0;
                 for(auto x:neighbors){
-                    val=val+phi(x);
+                    val=val-phi(x);
                 }
-                val=val-4*phi(origin);
+                val=val+4*phi(origin);
                 val=val/prod(domain.spacing());
                 res(origin)=val;
             }
@@ -69,7 +72,12 @@ void Laplacian<Dim>::computeResidual(const Tensor<Real,Dim>& phi,const Tensor<Re
     Tensor<Real,Dim> LapPhi;
     LapPhi.resize(phi.box());
     apply(phi,LapPhi);
-    res=rhs+LapPhi;
+    Box<2> bx=LapPhi.box();
+    //bx=bx.inflate(-1);
+    loop_box_2(bx,i,j){
+        res(i,j)=rhs(i,j)-LapPhi(i,j);
+    }
+    //res=rhs-LapPhi;
 };
 #else
 //nothing

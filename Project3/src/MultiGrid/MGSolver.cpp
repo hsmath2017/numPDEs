@@ -19,7 +19,7 @@ void MGSolver<Dim>::setParam(const MGParam& aparam){
 
 template<int Dim>
 void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs) const{
-    std::cout<<"Depth = "<<depth<<std::endl;
+    //std::cout<<"Depth = "<<depth<<std::endl;
     Laplacian<Dim> LevelOp=vLaplacian[depth];
     Tensor<Real,Dim> res;
     res.resize(rhs.box());
@@ -33,16 +33,23 @@ void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim
         }
     }
     if(depth==param.maxIter){
+        std::cout<<"phi = "<<phi<<std::endl;
+        std::cout<<"rhs = "<<rhs<<std::endl;
+        std::cout<<"res = "<<res<<std::endl;
         for(int i=0;i<param.numBottomIter;i++){
             LevelOp.smooth(phi,rhs,res);
             loop_box_2(rhs.box(),i,j){
                 phi(i,j)=res(i,j);
             }
         }
+        std::cout<<"phi = "<<phi<<std::endl;
     }else{
         LevelOp.computeResidual(phi,rhs,res);
+        std::cout<<"phi = "<<phi<<std::endl;
+        std::cout<<"rhs = "<<rhs<<std::endl;
+        std::cout<<"res = "<<res<<std::endl;
         Tensor<Real,Dim> newrhs;
-        auto bx=res.box();
+        Box<2> bx=res.box();
         auto vechi=bx.hi()/2;
         auto veclo=bx.lo();
         Box<Dim> newbx(veclo,vechi);
@@ -54,7 +61,10 @@ void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim
         Tensor<Real,Dim> residual;
         residual.resize(bx);
         vpInterpolation[depth]->apply(newres,residual);
-        phi=phi+residual;
+        //Box<2> parasbx=bx.inflate(-1);
+        loop_box_2(bx,i,j){
+            phi(i,j)=phi(i,j)+residual(i,j);
+        }
     }
     for(int i=0;i<param.numPostIter;i++){
         LevelOp.smooth(phi,rhs,res);

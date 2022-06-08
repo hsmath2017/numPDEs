@@ -136,6 +136,19 @@ testVCycle/fast:
 	$(MAKE) -f test/CMakeFiles/testVCycle.dir/build.make test/CMakeFiles/testVCycle.dir/build
 .PHONY : testVCycle/fast
 
+#=============================================================================
+# Target rules for targets named testOp
+
+# Build rule for target.
+testOp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 testOp
+.PHONY : testOp
+
+# fast build rule for target.
+testOp/fast:
+	$(MAKE) -f test/CMakeFiles/testOp.dir/build.make test/CMakeFiles/testOp.dir/build
+.PHONY : testOp/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -146,6 +159,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... MultiGrid"
 	@echo "... testVCycle"
+	@echo "... testOp"
 .PHONY : help
 
 

@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/shuang/numPDEs/Project3/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -125,6 +125,48 @@ testVCycle/fast:
 	cd /home/shuang/numPDEs/Project3/build && $(MAKE) -f test/CMakeFiles/testVCycle.dir/build.make test/CMakeFiles/testVCycle.dir/build
 .PHONY : testVCycle/fast
 
+# Convenience name for target.
+test/CMakeFiles/testOp.dir/rule:
+	cd /home/shuang/numPDEs/Project3/build && $(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/testOp.dir/rule
+.PHONY : test/CMakeFiles/testOp.dir/rule
+
+# Convenience name for target.
+testOp: test/CMakeFiles/testOp.dir/rule
+
+.PHONY : testOp
+
+# fast build rule for target.
+testOp/fast:
+	cd /home/shuang/numPDEs/Project3/build && $(MAKE) -f test/CMakeFiles/testOp.dir/build.make test/CMakeFiles/testOp.dir/build
+.PHONY : testOp/fast
+
+testOperator.o: testOperator.cpp.o
+
+.PHONY : testOperator.o
+
+# target to build an object file
+testOperator.cpp.o:
+	cd /home/shuang/numPDEs/Project3/build && $(MAKE) -f test/CMakeFiles/testOp.dir/build.make test/CMakeFiles/testOp.dir/testOperator.cpp.o
+.PHONY : testOperator.cpp.o
+
+testOperator.i: testOperator.cpp.i
+
+.PHONY : testOperator.i
+
+# target to preprocess a source file
+testOperator.cpp.i:
+	cd /home/shuang/numPDEs/Project3/build && $(MAKE) -f test/CMakeFiles/testOp.dir/build.make test/CMakeFiles/testOp.dir/testOperator.cpp.i
+.PHONY : testOperator.cpp.i
+
+testOperator.s: testOperator.cpp.s
+
+.PHONY : testOperator.s
+
+# target to generate assembly for a file
+testOperator.cpp.s:
+	cd /home/shuang/numPDEs/Project3/build && $(MAKE) -f test/CMakeFiles/testOp.dir/build.make test/CMakeFiles/testOp.dir/testOperator.cpp.s
+.PHONY : testOperator.cpp.s
+
 testVCycle.o: testVCycle.cpp.o
 
 .PHONY : testVCycle.o
@@ -158,9 +200,13 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... testVCycle"
-	@echo "... edit_cache"
+	@echo "... testOp"
+	@echo "... testOperator.o"
+	@echo "... testOperator.i"
+	@echo "... testOperator.s"
 	@echo "... testVCycle.o"
 	@echo "... testVCycle.i"
 	@echo "... testVCycle.s"
