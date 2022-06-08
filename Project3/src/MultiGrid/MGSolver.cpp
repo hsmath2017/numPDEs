@@ -21,15 +21,23 @@ template<int Dim>
 void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs) const{
     std::cout<<"Depth = "<<depth<<std::endl;
     Laplacian<Dim> LevelOp=vLaplacian[depth];
-    Tensor<Real,Dim> res=rhs;
+    Tensor<Real,Dim> res;
+    res.resize(rhs.box());
+    loop_box_2(rhs.box(),i,j){
+        res(i,j)=rhs(i,j);
+    }
     for(int i=0;i<param.numPreIter;i++){
         LevelOp.smooth(phi,rhs,res);
-        phi=res;
+        loop_box_2(rhs.box(),i,j){
+            phi(i,j)=res(i,j);
+        }
     }
     if(depth==param.maxIter){
         for(int i=0;i<param.numBottomIter;i++){
             LevelOp.smooth(phi,rhs,res);
-            phi=res;
+            loop_box_2(rhs.box(),i,j){
+                phi(i,j)=res(i,j);
+            }
         }
     }else{
         LevelOp.computeResidual(phi,rhs,res);
@@ -50,7 +58,9 @@ void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim
     }
     for(int i=0;i<param.numPostIter;i++){
         LevelOp.smooth(phi,rhs,res);
-        phi=res;
+        loop_box_2(rhs.box(),i,j){
+            phi(i,j)=res(i,j);
+        }
     }
     return;
 }
@@ -85,6 +95,7 @@ void MGSolver<Dim>::solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,S
     FF.fill(rhs,RightFunc);
     BoundaryFiller<Dim> BF(vDomain[0]);
     BF.fillAllSides(rhs,BdryFunc);
+    BF.fillAllSides(phi,BdryFunc);
     //Solve
     if(useFMVCycle){
         FMVCycle(0,phi,rhs);

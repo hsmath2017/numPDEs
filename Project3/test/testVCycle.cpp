@@ -10,7 +10,7 @@ int main(){
     Vector<RectDomain<2>> GridVec;
     VPR<2> VecRestrict;
     VPI<2> VecInterp;
-    for(int i=8;i>=2;i--){
+    for(int i=4;i>=2;i--){
         Box<2> bx({0,0},{(int)std::pow(2,i),(int)std::pow(2,i)});
         int gridnum=std::pow(2,i);
         Vec<Real,2> dx={1.0/gridnum,1.0/gridnum};
@@ -26,9 +26,9 @@ int main(){
     MGSolver<2> MGS(GridVec,VecRestrict,VecInterp);
     MGParam param;
     param.maxIter=0;
-    param.numPreIter=10000;
-    param.numPostIter=10000;
-    param.numBottomIter=10000;
+    param.numPreIter=1;
+    param.numPostIter=1;
+    param.numBottomIter=1;
     param.reltol=0.01;
     MGS.setParam(param);
     ScalarFunction<2>* RhsFunc=new RightHand;
@@ -38,8 +38,11 @@ int main(){
     MGS.solve(phi,RhsFunc,BdryFunc,false);
     FuncFiller<2> FF(GridVec[0]);
     ScalarFunction<2>* SolFunc=new Sol;
-    Tensor<Real,2> sol(phi);
+    Tensor<Real,2> sol;
+    sol.resize(phi.box());
     FF.fill(sol,SolFunc);
+    std::cout<<phi<<std::endl;
+    std::cout<<sol<<std::endl;
     Real maxErr=MGS.getError(phi,sol);
     std::cout<<maxErr<<std::endl;
 }

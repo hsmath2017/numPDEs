@@ -21,12 +21,14 @@ void WeightedJacobi<Dim>::apply(const Tensor<Real,Dim>& phi, const Tensor<Real,D
         assert(bx.contain(bx_res)&&bx_res.contain(bx));
         assert(bx.contain(bx_rhs)&&bx_rhs.contain(bx));
         tmp.resize(bx);
-        tmp=rhs;
-        bx=bx.inflate(-1);
         loop_box_2(bx,i,j){
+            tmp(i,j)=rhs(i,j);
+        }
+        auto newbx=bx.inflate(-1);
+        loop_box_2(newbx,i,j){
             tmp(i,j)=0;//initialize
         }
-        loop_box_2(bx,i,j){
+        loop_box_2(newbx,i,j){
             tmp(i,j)+=area*rhs(i,j)/4.0;
             tmp(i,j)=tmp(i,j)+(1/4.0)*(phi(i-1,j)+phi(i+1,j)+phi(i,j-1)+phi(i,j+1));
         }
