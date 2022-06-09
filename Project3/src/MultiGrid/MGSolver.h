@@ -41,12 +41,14 @@ public:
 
     Real getError(const Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& sol){
         Real maxError=0;
-        auto bx=phi.box();
+        Box<Dim> bx=phi.box();
         loop_box_2(bx,i,j){
             if(std::abs(phi(i,j)-sol(i,j))>maxError){
-                maxError=std::abs(phi(i,j)-sol(i,j));
+                maxError+=std::abs(phi(i,j)-sol(i,j));
             }
         }
+        auto sz=bx.size();
+        maxError=maxError/(sz[0]*sz[1]);
         return maxError;
     }
 };

@@ -10,7 +10,7 @@ int main(){
     Vector<RectDomain<2>> GridVec;
     VPR<2> VecRestrict;
     VPI<2> VecInterp;
-    for(int i=2;i>=1;i--){
+    for(int i=7;i>=2;i--){
         Box<2> bx({0,0},{(int)std::pow(2,i),(int)std::pow(2,i)});
         int gridnum=std::pow(2,i);
         Vec<Real,2> dx={1.0/gridnum,1.0/gridnum};
@@ -18,17 +18,17 @@ int main(){
         GridVec.push_back(RD);
     }
     for(int i=0;i<GridVec.size()-1;i++){
-        Injection<2>* pRes=new Injection<2>(GridVec[i],GridVec[i+1]);
+        FullWeighting<2>* pRes=new FullWeighting<2>(GridVec[i],GridVec[i+1]);
         VecRestrict.push_back(pRes);
         LinearInterpolator<2>* pInterp=new LinearInterpolator<2>(GridVec[i],GridVec[i+1]);
         VecInterp.push_back(pInterp);
     }
     MGSolver<2> MGS(GridVec,VecRestrict,VecInterp);
     MGParam param;
-    param.maxIter=1;
-    param.numPreIter=1;
-    param.numPostIter=1;
-    param.numBottomIter=100;
+    param.maxIter=4;
+    param.numPreIter=10;
+    param.numPostIter=10;
+    param.numBottomIter=10000;
     param.reltol=0.01;
     MGS.setParam(param);
     ScalarFunction<2>* RhsFunc=new RightHand;

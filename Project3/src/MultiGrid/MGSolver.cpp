@@ -19,8 +19,9 @@ void MGSolver<Dim>::setParam(const MGParam& aparam){
 
 template<int Dim>
 void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim>& rhs) const{
-    //std::cout<<"Depth = "<<depth<<std::endl;
+    std::cout<<"Depth = "<<depth<<std::endl;
     Laplacian<Dim> LevelOp=vLaplacian[depth];
+    std::cout<<"size = "<<LevelOp.getsize()<<std::endl;
     Tensor<Real,Dim> res;
     res.resize(rhs.box());
     // loop_box_2(rhs.box(),i,j){
@@ -41,7 +42,6 @@ void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim
         }
     }else{
         std::cout<<"phi = "<<phi<<std::endl;
-        std::cout<<"rhs = "<<rhs<<std::endl;
         LevelOp.computeResidual(phi,rhs,res);
         std::cout<<"res = "<<res<<std::endl;
         Tensor<Real,Dim> newrhs;
@@ -109,7 +109,6 @@ void MGSolver<Dim>::solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,S
     loop_box_2(bx,i,j){
         rhs(i,j)=tmp(i,j);
     }
-    std::cout<<"rhs = "<<rhs<<std::endl;
     BoundaryFiller<Dim> BF(vDomain[0]);
     //BF.fillAllSides(rhs,BdryFunc);
     Real area=prod(vDomain[0].spacing());
@@ -136,13 +135,14 @@ void MGSolver<Dim>::solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,S
             }
         }
     }
-    std::cout<<"rhs = "<<rhs<<std::endl;
     //BF.fillAllSides(phi,BdryFunc);
     //Solve
     if(useFMVCycle){
         FMVCycle(0,phi,rhs);
     }else{
+        for(int i=0;i<100;i++){
         VCycle(0,phi,rhs);
+        }
     }
     BF.fillAllSides(phi,BdryFunc);
     //Generate Error
