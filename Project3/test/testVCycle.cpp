@@ -18,7 +18,7 @@ int main(){
         GridVec.push_back(RD);
     }
     for(int i=0;i<GridVec.size()-1;i++){
-        FullWeighting<2>* pRes=new FullWeighting<2>(GridVec[i],GridVec[i+1]);
+        Injection<2>* pRes=new Injection<2>(GridVec[i],GridVec[i+1]);
         VecRestrict.push_back(pRes);
         LinearInterpolator<2>* pInterp=new LinearInterpolator<2>(GridVec[i],GridVec[i+1]);
         VecInterp.push_back(pInterp);
@@ -28,7 +28,7 @@ int main(){
     param.maxIter=1;
     param.numPreIter=1;
     param.numPostIter=1;
-    param.numBottomIter=1000;
+    param.numBottomIter=100;
     param.reltol=0.01;
     MGS.setParam(param);
     ScalarFunction<2>* RhsFunc=new RightHand;
@@ -42,5 +42,7 @@ int main(){
     sol.resize(phi.box());
     FF.fill(sol,SolFunc);
     Real maxErr=MGS.getError(phi,sol);
+    std::cout<<phi<<std::endl;
+    std::cout<<sol<<std::endl;
     std::cout<<maxErr<<std::endl;
 }

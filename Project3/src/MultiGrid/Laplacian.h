@@ -47,7 +47,17 @@ void Laplacian<Dim>::apply(const Tensor<Real,Dim>& phi,Tensor<Real,Dim>& res) co
             }else{
                 Real val=0;
                 for(auto x:neighbors){
-                    val=val-phi(x);
+                    bool flag=true;
+                    for(auto it:Directions){
+                        auto tmp=it+x;
+                        if(domain.contain(tmp)==false){
+                            flag=false;
+                            break;
+                        }
+                    }
+                    if(flag){
+                        val=val-phi(x);
+                    }
                 }
                 val=val+4*phi(origin);
                 val=val/prod(domain.spacing());
@@ -73,11 +83,11 @@ void Laplacian<Dim>::computeResidual(const Tensor<Real,Dim>& phi,const Tensor<Re
     LapPhi.resize(phi.box());
     apply(phi,LapPhi);
     Box<2> bx=LapPhi.box();
-    //bx=bx.inflate(-1);
+    bx=bx.inflate(-1);
+    std::cout<<"LapPhi = "<<LapPhi<<std::endl;
     loop_box_2(bx,i,j){
         res(i,j)=rhs(i,j)-LapPhi(i,j);
     }
-    //res=rhs-LapPhi;
 };
 #else
 //nothing

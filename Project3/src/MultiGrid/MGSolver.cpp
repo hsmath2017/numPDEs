@@ -23,9 +23,9 @@ void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim
     Laplacian<Dim> LevelOp=vLaplacian[depth];
     Tensor<Real,Dim> res;
     res.resize(rhs.box());
-    loop_box_2(rhs.box(),i,j){
-        res(i,j)=rhs(i,j);
-    }
+    // loop_box_2(rhs.box(),i,j){
+    //     res(i,j)=rhs(i,j);
+    // }
     for(int i=0;i<param.numPreIter;i++){
         LevelOp.smooth(phi,rhs,res);
         loop_box_2(rhs.box(),i,j){
@@ -33,20 +33,16 @@ void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim
         }
     }
     if(depth==param.maxIter){
-        std::cout<<"phi = "<<phi<<std::endl;
-        std::cout<<"rhs = "<<rhs<<std::endl;
-        std::cout<<"res = "<<res<<std::endl;
         for(int i=0;i<param.numBottomIter;i++){
             LevelOp.smooth(phi,rhs,res);
             loop_box_2(rhs.box(),i,j){
                 phi(i,j)=res(i,j);
             }
         }
-        std::cout<<"phi = "<<phi<<std::endl;
     }else{
-        LevelOp.computeResidual(phi,rhs,res);
         std::cout<<"phi = "<<phi<<std::endl;
         std::cout<<"rhs = "<<rhs<<std::endl;
+        LevelOp.computeResidual(phi,rhs,res);
         std::cout<<"res = "<<res<<std::endl;
         Tensor<Real,Dim> newrhs;
         Box<2> bx=res.box();
@@ -55,17 +51,21 @@ void MGSolver<Dim>::VCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,Dim
         Box<Dim> newbx(veclo,vechi);
         newrhs.resize(newbx);
         vpRestriction[depth]->apply(res,newrhs);
+        std::cout<<"newrhs = "<<newrhs<<std::endl;
         Tensor<Real,Dim> newres;
         newres.resize(newbx);
         VCycle(depth+1,newres,newrhs);
+        std::cout<<"newres = "<<newres<<std::endl;
         Tensor<Real,Dim> residual;
         residual.resize(bx);
         vpInterpolation[depth]->apply(newres,residual);
-        //Box<2> parasbx=bx.inflate(-1);
-        loop_box_2(bx,i,j){
+        std::cout<<"residual = "<<residual<<std::endl;
+        Box<2> parasbx=bx.inflate(-1);
+        loop_box_2(parasbx,i,j){
             phi(i,j)=phi(i,j)+residual(i,j);
         }
     }
+    std::cout<<"phi = "<<phi<<std::endl;
     for(int i=0;i<param.numPostIter;i++){
         LevelOp.smooth(phi,rhs,res);
         loop_box_2(rhs.box(),i,j){
@@ -98,20 +98,53 @@ void MGSolver<Dim>::FMVCycle(int depth,Tensor<Real,Dim>& phi,const Tensor<Real,D
 template<int Dim>
 void MGSolver<Dim>::solve(Tensor<Real,Dim>& phi,ScalarFunction<Dim>* RightFunc,ScalarFunction<Dim>* BdryFunc,bool useFMVCycle) const{
     //Generate RHS
+    std::vector<Vec<int,2>> Dir={{1,0},{-1,0},{0,1},{0,-1}};
     Tensor<Real,Dim> rhs;
     Box<Dim> bx=vDomain[0];
     rhs.resize(bx);
+    bx=bx.inflate(-1);
+    Tensor<Real,Dim> tmp(bx);
     FuncFiller<Dim> FF(vDomain[0]);
-    FF.fill(rhs,RightFunc);
+    FF.fill(tmp,RightFunc);
+    loop_box_2(bx,i,j){
+        rhs(i,j)=tmp(i,j);
+    }
+    std::cout<<"rhs = "<<rhs<<std::endl;
     BoundaryFiller<Dim> BF(vDomain[0]);
-    BF.fillAllSides(rhs,BdryFunc);
-    BF.fillAllSides(phi,BdryFunc);
+    //BF.fillAllSides(rhs,BdryFunc);
+    Real area=prod(vDomain[0].spacing());
+    //remote the RHS on the boundary of domain.
+    bx=bx.inflate(1);
+    Box<Dim> innerbx=bx.inflate(-1);
+    loop_box_2(innerbx,i,j){
+        Vec<int,2> origin{i,j};
+        for(auto c:Dir){
+            auto tmp=origin+c;
+            bool flag=false;//is 'tmp' a boundary cell?
+            for(auto d:Dir){
+                auto test=tmp+d;
+                if(bx.contain(test)==false){
+                    flag=true;
+                    break;
+                }
+            }
+            if(flag){
+                Vec<Real,2> dx=vDomain[0].spacing();
+                dx[0]=dx[0]*tmp[0];
+                dx[1]=dx[1]*tmp[1];
+                rhs(origin)+=BdryFunc->operator()(dx)/area;
+            }
+        }
+    }
+    std::cout<<"rhs = "<<rhs<<std::endl;
+    //BF.fillAllSides(phi,BdryFunc);
     //Solve
     if(useFMVCycle){
         FMVCycle(0,phi,rhs);
     }else{
         VCycle(0,phi,rhs);
     }
+    BF.fillAllSides(phi,BdryFunc);
     //Generate Error
 };
 
